@@ -82,6 +82,7 @@ if __name__ == "__main__":
         # まず全データのDataFrameを作成
         df = pd.DataFrame([{
             "順位": i + 1,
+            "元の順位": i + 1,  # 元の順位を保存
             "曲名": track.get("name", "不明"),
             "アーティスト": track.get("artist", {}).get("name", "不明")
         } for i, track in enumerate(tracks)])
@@ -110,10 +111,14 @@ if __name__ == "__main__":
         df["順位"] = df.apply(lambda row: calc_rank(
             row.name, {"artist": {"name": row["アーティスト"]}}, multiplier), axis=1)
 
-        # 順位でソート
-        df = df.sort_values("順位")
+        # 順位でソート（同率の場合は元の順位でソート）
+        df = df.sort_values(["順位", "元の順位"])
         # 選択された表示件数で制限
         df = df.head(display_limit)
+        # 順位を1から連番で振り直す
+        df["順位"] = range(1, len(df) + 1)
+        # 元の順位カラムを削除
+        df = df.drop("元の順位", axis=1)
         st.dataframe(df, use_container_width=True, hide_index=True)
     else:
         st.error("データの取得に失敗しました。APIキーが正しく設定されているか、Last.fmの仕様が変わっていないかご確認ください。")
