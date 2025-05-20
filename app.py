@@ -76,13 +76,5 @@ if __name__ == "__main__":
             "アーティスト": track.get("artist", {}).get("name", "不明")
         } for i, track in enumerate(tracks)])
         st.dataframe(df, use_container_width=True)
-
-        # 再生回数が数値の場合のみグラフを表示
-        if df["再生回数"].dtype != "object":  # 再生回数が数値型の場合
-            st.subheader("再生回数トップ10")
-            top_10 = df.head(10)
-            st.bar_chart(top_10.set_index("曲名")["再生回数"])
-        else:
-            st.warning("再生回数のデータが利用できないため、グラフを表示できません。")
     else:
         st.error("データの取得に失敗しました。APIキーが正しく設定されているか、Last.fmの仕様が変わっていないかご確認ください。")
