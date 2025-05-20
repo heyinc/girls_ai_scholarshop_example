@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 # Last.fm APIの設定
-API_KEY = os.getenv("LAST_FM_API_KEY")
+API_KEY = os.getenv("LASTFM_API_KEY")
 BASE_URL = "http://ws.audioscrobbler.com/2.0/"
 
 # タイトルを表示
